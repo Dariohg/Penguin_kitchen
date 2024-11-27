@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Información del proyecto -->
+    <groupId>com.penguin.kitchen</groupId>
+    <artifactId>restaurant-simulator</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- Definir la versión de Java que usaremos -->
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <!-- Repositorios donde Maven buscará las dependencias -->
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+
+    <!-- Dependencias -->
+    <dependencies>
+        <!-- Dependencia FXGL 17.0 desde archivo local -->
+        <dependency>
+            <groupId>com.github.almasb</groupId>
+            <artifactId>fxgl</artifactId>
+            <version>17.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/fxgl-17-uber.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+
+    <!-- Plugins de construcción -->
+    <build>
+        <plugins>
+            <!-- Configuración para compilar Java 17 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
