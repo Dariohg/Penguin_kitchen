@@ -29,9 +29,7 @@
         <dependency>
             <groupId>com.github.almasb</groupId>
             <artifactId>fxgl</artifactId>
-            <version>17.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/fxgl-17-uber.jar</systemPath>
+            <version>17.3</version>
         </dependency>
     </dependencies>
 

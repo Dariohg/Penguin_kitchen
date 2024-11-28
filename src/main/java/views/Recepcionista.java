@@ -7,7 +7,7 @@ public class Recepcionista {
     private final Entity recepcionista;
 
     public Recepcionista () {
-        this.recepcionista = FXGL.entityBuilder().at(-160,40).scale(0.2,0.2).viewWithBBox("RECEPCIONISTA.PNG").build();
+        this.recepcionista = FXGL.entityBuilder().at(-200,40).scale(0.2,0.2).viewWithBBox("RECEPCIONISTA.PNG").build();
     }
 
     public Entity getRecepcionista() {
