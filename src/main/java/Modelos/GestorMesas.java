@@ -1,6 +1,5 @@
 package Modelos;
 
-import com.almasb.fxgl.entity.Entity;
 import views.Mesa;
 import com.almasb.fxgl.dsl.FXGL;
 
@@ -33,7 +32,7 @@ public class GestorMesas {
     }
 
     // Método para añadir las mesas al mundo de FXGL
-    public static void añadirMesasAlMundo() {
+    public static void addMesas() {
         // Obtener la lista de mesas creadas
         List<Mesa> mesas = crearMesas();
 

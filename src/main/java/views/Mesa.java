@@ -8,14 +8,15 @@ public class Mesa {
 
     private final Entity mesa;
     private boolean ocupada;
+    private Cliente clienteAsignado;  // Almacenar cliente asignado
 
     // Constructor que crea una mesa en una posición específica
     public Mesa(double x, double y) {
         this.mesa = FXGL.entityBuilder()
                 .at(x, y)
-                .viewWithBBox("mesero.png") // Asegúrate de tener una imagen de mesa (aunque no sea visualmente importante, se necesita para FXGL)
+                .viewWithBBox("mesa.png") // Asegúrate de tener una imagen de mesa
                 .build();
-        this.ocupada = false; // Inicialmente la mesa está libre
+        this.ocupada = false;  // Inicialmente la mesa está libre
     }
 
     // Método para obtener la entidad de la mesa
@@ -41,6 +42,16 @@ public class Mesa {
     // Método para liberar la mesa
     public void liberar() {
         this.ocupada = false;
+        this.clienteAsignado = null;  // El cliente se va
+    }
+
+    // Método para asignar un cliente a la mesa
+    public void asignarCliente(Cliente cliente) {
+        this.clienteAsignado = cliente;
+    }
+
+    // Método para obtener el cliente asignado
+    public Cliente getClienteAsignado() {
+        return clienteAsignado;
     }
 }
-
