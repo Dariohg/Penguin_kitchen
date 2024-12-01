@@ -9,7 +9,7 @@ import java.util.LinkedList;
 public class MonitorMesas {
 
     private final List<Mesa> mesas;
-    private final Queue<Cliente> clientesEsperando = new LinkedList<>();  // Cola de clientes esperando
+    private final Queue<Cliente> clientesEsperando = new LinkedList<>(); // Cola de clientes esperando
 
     public MonitorMesas(List<Mesa> mesas) {
         this.mesas = mesas;
@@ -22,16 +22,19 @@ public class MonitorMesas {
                 if (!mesa.estaOcupada()) {
                     mesa.ocupar();
                     mesa.asignarCliente(cliente);
-                    clientesEsperando.add(cliente);  // Añadir a la cola de clientes esperando
+                    cliente.setMesa(mesa);
+                    synchronized (clientesEsperando) {
+                        clientesEsperando.add(cliente); // Añadir a la cola de clientes esperando
+                        clientesEsperando.notifyAll(); // Notificar al mesero
+                    }
                     System.out.println(Thread.currentThread().getName() + " se le asignó una mesa: " + mesa.getMesa().getPosition());
-                    notifyAll();  // Notificar al mesero
                     return mesa;
                 }
             }
 
             try {
                 System.out.println(Thread.currentThread().getName() + " esperando una mesa...");
-                wait();  // Esperar hasta que haya mesas disponibles
+                wait(); // Esperar hasta que haya mesas disponibles
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw new RuntimeException(e);
@@ -41,14 +44,29 @@ public class MonitorMesas {
 
     // Método sincronizado para liberar la mesa cuando el cliente termina
     public synchronized void liberarMesa(Mesa mesa) {
-        mesa.liberar();  // Liberar la mesa
-        clientesEsperando.remove(); // Eliminar el cliente de la cola cuando termine
+        mesa.liberar(); // Liberar la mesa
+        synchronized (clientesEsperando) {
+            if (!clientesEsperando.isEmpty()) {
+                clientesEsperando.remove(); // Eliminar el cliente de la cola
+            }
+            clientesEsperando.notifyAll(); // Notificar a los clientes en espera
+        }
         System.out.println(Thread.currentThread().getName() + " liberó una mesa: " + mesa.getMesa().getPosition());
-        notifyAll();  // Notificar a los clientes en espera
+        notifyAll(); // Notificar a los clientes en espera
     }
 
-    // Método para obtener el siguiente cliente que debe ser atendido
-    public synchronized Cliente obtenerSiguienteCliente() {
-        return clientesEsperando.poll(); // Obtener el siguiente cliente en la cola
+    // Método sincronizado para obtener el siguiente cliente que debe ser atendido
+    public Cliente obtenerSiguienteCliente() {
+        synchronized (clientesEsperando) {
+            while (clientesEsperando.isEmpty()) {
+                try {
+                    clientesEsperando.wait(); // Esperar hasta que haya clientes en la cola
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+            }
+            return clientesEsperando.poll(); // Obtener el siguiente cliente en la cola
+        }
     }
 }

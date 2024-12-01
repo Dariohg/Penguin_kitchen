@@ -3,6 +3,7 @@ package Controladores;
 import views.Cliente;
 import views.Mesa;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 
 public class ControladorCliente {
@@ -31,9 +32,19 @@ public class ControladorCliente {
         }
     }
 
+    // Método para eliminar el plato del cliente
+    public void eliminarPlato(Entity plato) {
+        FXGL.runOnce(() -> {
+            FXGL.getGameWorld().removeEntity(plato); // Eliminar la entidad del plato
+            System.out.println("Plato eliminado.");
+        }, javafx.util.Duration.ZERO);
+    }
+
     // Eliminar al cliente de la entidad después de ser atendido
     public void EliminarEntidadCliente() {
-        // Usamos FXGL para eliminar la entidad del cliente del mundo
-        FXGL.runOnce(() -> FXGL.getGameWorld().removeEntity(cliente.getCliente()), javafx.util.Duration.ZERO);
+        FXGL.runOnce(() -> {
+            FXGL.getGameWorld().removeEntity(cliente.getCliente()); // Eliminar la entidad gráfica del cliente
+            System.out.println("Cliente eliminado del sistema.");
+        }, javafx.util.Duration.ZERO);
     }
 }

@@ -1,8 +1,13 @@
 package Main;
 
+import Controladores.ControladorCocinero;
 import Controladores.ControladorMesero;
 import Hilos.HiloMesero;
+import Hilos.HiloCocinero;
 import Monitores.MonitorMesas;
+import Monitores.MonitorOrdenes;
+import Monitores.MonitorComidas;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import javafx.util.Duration;
@@ -18,6 +23,8 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 public class Main extends GameApplication {
 
     private MonitorMesas monitorMesas;
+    private MonitorOrdenes monitorOrdenes;
+    private MonitorComidas monitorComidas; // Nuevo monitor para comidas
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
@@ -43,7 +50,11 @@ public class Main extends GameApplication {
         // Crear las mesas
         List<Mesa> mesas = GestorMesas.crearMesas();
         GestorMesas.addMesas();
-        monitorMesas = new MonitorMesas(mesas);  // Crear el MonitorMesas aquí
+
+        // Instanciar monitores
+        monitorMesas = new MonitorMesas(mesas);
+        monitorOrdenes = new MonitorOrdenes(); // El buffer es manejado internamente
+        monitorComidas = new MonitorComidas(); // Nuevo monitor de comidas
 
         // Crear un ClienteManager con tasa de llegada 1 cliente por segundo
         ClienteManager clienteManager = new ClienteManager(1, monitorMesas);
@@ -51,17 +62,22 @@ public class Main extends GameApplication {
         // Generar clientes en intervalos usando Poisson
         FXGL.run(() -> {
             clienteManager.generarClientes();
-        }, Duration.millis(3000));  // Generar un nuevo cliente cada 3 segundos
+        }, Duration.millis(3000)); // Generar un nuevo cliente cada 3 segundos
 
         // Crear y empezar el hilo del mesero
         Mesero m = new Mesero();
         FXGL.getGameWorld().addEntity(m.getMesero());
         ControladorMesero controladorMesero = new ControladorMesero(m);
-        HiloMesero hiloMesero = new HiloMesero(controladorMesero, monitorMesas);  // Pasa monitorMesas
-        new Thread(hiloMesero, "Mesero").start();  // Inicia el hilo del mesero
+        HiloMesero hiloMesero = new HiloMesero(controladorMesero, monitorMesas, monitorOrdenes, monitorComidas); // Pasa el monitorOrdenes
+        new Thread(hiloMesero, "Mesero").start(); // Inicia el hilo del mesero
+
+        // Crear y empezar el hilo del cocinero
+        ControladorCocinero controladorCocinero = new ControladorCocinero(c);
+        HiloCocinero hiloCocinero = new HiloCocinero(controladorCocinero, monitorOrdenes, monitorComidas); // Pasa los monitores
+        new Thread(hiloCocinero, "Cocinero").start(); // Inicia el hilo del cocinero
     }
 
     public static void main(String[] args) {
-        launch(args);  // Lanza la aplicación FXGL
+        launch(args); // Lanza la aplicación FXGL
     }
 }

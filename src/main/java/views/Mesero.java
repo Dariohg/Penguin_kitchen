@@ -11,7 +11,7 @@ public class Mesero {
         this.mesero = FXGL.entityBuilder()
                 .at(40, -160)   // Posición inicial del mesero
                 .scale(0.2, 0.2) // Escala
-                .viewWithBBox("MESERO.PNG")  // Imagen del mesero
+                .viewWithBBox("mesero.png")  // Imagen del mesero
                 .build();
         // No movemos el mesero al principio
     }

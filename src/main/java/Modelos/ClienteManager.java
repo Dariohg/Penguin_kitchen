@@ -4,7 +4,6 @@ import views.Cliente;
 import Controladores.ControladorCliente;
 import Hilos.HiloCliente;
 import Monitores.MonitorMesas;
-import com.almasb.fxgl.dsl.FXGL;
 
 public class ClienteManager {
 
@@ -21,7 +20,7 @@ public class ClienteManager {
         int llegada = poisson.sample();
         for (int i = 0; i < llegada; i++) {
             // Crear cliente
-            Cliente cliente = new Cliente();
+            Cliente cliente = new Cliente(i);
             ControladorCliente controladorCliente = new ControladorCliente(cliente);
             HiloCliente hiloCliente = new HiloCliente(controladorCliente, cliente, monitorMesas);
             new Thread(hiloCliente, "Cliente-" + i).start(); // Crear y lanzar hilo de cliente
