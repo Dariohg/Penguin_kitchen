@@ -15,15 +15,33 @@ public class ClienteManager {
         this.monitorMesas = monitorMesas;
     }
 
-    public void generarClientes() {
-        // Usamos Poisson para determinar el número de clientes que llegan
+    public void generarClientes(int totalClientes) {
+        // Si ya se han generado 100 clientes, no hacer nada
+        if (totalClientes >= 100) {
+            return;
+        }
+
+        // Obtener número de clientes a generar según Poisson
         int llegada = poisson.sample();
+
+        // Ajustar si se excedería el límite de 100 clientes
+        if (totalClientes + llegada > 100) {
+            llegada = 100 - totalClientes;
+        }
+
+        // Generar clientes
         for (int i = 0; i < llegada; i++) {
-            // Crear cliente
-            Cliente cliente = new Cliente(i);
+            // Usar totalClientes como ID único
+            Cliente cliente = new Cliente(totalClientes);
             ControladorCliente controladorCliente = new ControladorCliente(cliente);
             HiloCliente hiloCliente = new HiloCliente(controladorCliente, cliente, monitorMesas);
-            new Thread(hiloCliente, "Cliente-" + i).start(); // Crear y lanzar hilo de cliente
+            
+            // Comenzar el hilo del cliente
+            Thread clienteThread = new Thread(hiloCliente, "Cliente-" + totalClientes);
+            clienteThread.start();
         }
+
+        System.out.println("Clientes generados en esta iteración: " + llegada + 
+                           " | Total clientes: " + totalClientes);
     }
 }

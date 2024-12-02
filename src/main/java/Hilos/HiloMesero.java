@@ -56,11 +56,11 @@ public class HiloMesero implements Runnable {
                         }
 
                         // Esperar un poco antes de eliminar el plato
-                        try {
-                            Thread.sleep(2000); // Simular tiempo para entregar el plato
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
+                        // try {
+                        //     Thread.sleep(2000); // Simular tiempo para entregar el plato
+                        // } catch (InterruptedException e) {
+                        //     Thread.currentThread().interrupt();
+                        // }
 
                         // El cliente se encargará de eliminar el plato al irse
                         cliente.setPlato(plato);

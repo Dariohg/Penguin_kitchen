@@ -26,6 +26,10 @@ public class HiloCliente implements Runnable {
         this.plato = plato;
     }
 
+    public int getClienteId(){
+        return cliente.getId();
+    }
+
     @Override
     public void run() {
         // Asignar una mesa al cliente
@@ -54,9 +58,9 @@ public class HiloCliente implements Runnable {
 
         // Liberar la mesa y eliminar el plato
         monitorMesas.liberarMesa(mesaAsignada);
-        if (plato != null) {
-            controladorCliente.eliminarPlato(plato); // Eliminar el plato del cliente
-        }
+        // if (plato != null) {
+        //     controladorCliente.eliminarPlato(plato); // Eliminar el plato del cliente
+        // }
 
         // Eliminar al cliente del sistema
         controladorCliente.EliminarEntidadCliente();

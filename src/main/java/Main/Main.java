@@ -25,6 +25,7 @@ public class Main extends GameApplication {
     private MonitorMesas monitorMesas;
     private MonitorOrdenes monitorOrdenes;
     private MonitorComidas monitorComidas; // Nuevo monitor para comidas
+    private int totalClientes;
 
     @Override
     protected void initSettings(GameSettings gameSettings) {
@@ -59,10 +60,12 @@ public class Main extends GameApplication {
         // Crear un ClienteManager con tasa de llegada 1 cliente por segundo
         ClienteManager clienteManager = new ClienteManager(1, monitorMesas);
 
+        totalClientes = 0;
         // Generar clientes en intervalos usando Poisson
         FXGL.run(() -> {
-            clienteManager.generarClientes();
-        }, Duration.millis(3000)); // Generar un nuevo cliente cada 3 segundos
+            clienteManager.generarClientes(totalClientes);
+            totalClientes++;
+        }, Duration.millis(1000 + Math.random() * 2000)); // Generar un nuevo cliente cada 1 - 3 segundos
 
         // Crear y empezar el hilo del mesero
         Mesero m = new Mesero();

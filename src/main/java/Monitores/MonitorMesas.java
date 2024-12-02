@@ -4,12 +4,12 @@ import views.Mesa;
 import views.Cliente;
 import java.util.List;
 import java.util.Queue;
-import java.util.LinkedList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MonitorMesas {
 
     private final List<Mesa> mesas;
-    private final Queue<Cliente> clientesEsperando = new LinkedList<>(); // Cola de clientes esperando
+    private final Queue<Cliente> clientesEsperando = new LinkedBlockingQueue<>(); // Cola de clientes esperando
 
     public MonitorMesas(List<Mesa> mesas) {
         this.mesas = mesas;
@@ -42,20 +42,19 @@ public class MonitorMesas {
         }
     }
 
-    // Método sincronizado para liberar la mesa cuando el cliente termina
     public synchronized void liberarMesa(Mesa mesa) {
         mesa.liberar(); // Liberar la mesa
         synchronized (clientesEsperando) {
-            if (!clientesEsperando.isEmpty()) {
-                clientesEsperando.remove(); // Eliminar el cliente de la cola
+            // Solo eliminar el primer cliente si coincide con la mesa liberada
+            if (!clientesEsperando.isEmpty() && clientesEsperando.peek().getMesa() == mesa) {
+                clientesEsperando.poll(); // Eliminar el cliente de la cola
             }
             clientesEsperando.notifyAll(); // Notificar a los clientes en espera
         }
-        System.out.println(Thread.currentThread().getName() + " liberó una mesa: " + mesa.getMesa().getPosition());
+        System.out.println(Thread.currentThread().getName()  + " liberó una mesa: " + mesa.getMesa().getPosition());
         notifyAll(); // Notificar a los clientes en espera
     }
 
-    // Método sincronizado para obtener el siguiente cliente que debe ser atendido
     public Cliente obtenerSiguienteCliente() {
         synchronized (clientesEsperando) {
             while (clientesEsperando.isEmpty()) {
@@ -63,10 +62,15 @@ public class MonitorMesas {
                     clientesEsperando.wait(); // Esperar hasta que haya clientes en la cola
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
+                    return null;
                 }
             }
-            return clientesEsperando.poll(); // Obtener el siguiente cliente en la cola
+            
+            // Imprimir la cola de clientes para depuración
+            System.out.println("Clientes esperando: " + clientesEsperando);
+            
+            // Retornar el primer cliente de la cola
+            return clientesEsperando.peek();
         }
     }
 }

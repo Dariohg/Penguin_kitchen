@@ -37,7 +37,7 @@ public class ControladorMesero {
         Platform.runLater(() -> {
             Entity plato = FXGL.entityBuilder()
                 .at(mesa.getPosition().add(10, 10)) // Ajustar posición
-                .viewWithBBox("food.png")          // Asset del plato
+                .viewWithBBox("comida.png")          // Asset del plato
                 .scale(0.2, 0.2)                  // Escala del plato
                 .buildAndAttach();
 

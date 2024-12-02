@@ -28,4 +28,13 @@ public class Mesero {
                 .to(mesa.getPosition()) // Moverlo a la mesa
                 .buildAndPlay();
     }
+
+    // Método para volver a la posición original
+public void volverACocina() {
+    FXGL.animationBuilder()
+            .duration(javafx.util.Duration.seconds(2)) // Duración del movimiento
+            .translate(mesero) // Mover el mesero
+            .to(new Point2D(40, -160)) // Moverlo a la posición inicial
+            .buildAndPlay();
+}
 }

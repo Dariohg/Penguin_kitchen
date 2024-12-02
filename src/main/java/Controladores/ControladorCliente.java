@@ -33,12 +33,12 @@ public class ControladorCliente {
     }
 
     // Método para eliminar el plato del cliente
-    public void eliminarPlato(Entity plato) {
-        FXGL.runOnce(() -> {
-            FXGL.getGameWorld().removeEntity(plato); // Eliminar la entidad del plato
-            System.out.println("Plato eliminado.");
-        }, javafx.util.Duration.ZERO);
-    }
+    // public void eliminarPlato(Entity plato) {
+    //     FXGL.runOnce(() -> {
+    //         FXGL.getGameWorld().removeEntity(plato); // Eliminar la entidad del plato
+    //         System.out.println("Plato eliminado.");
+    //     }, javafx.util.Duration.ZERO);
+    // }
 
     // Eliminar al cliente de la entidad después de ser atendido
     public void EliminarEntidadCliente() {
