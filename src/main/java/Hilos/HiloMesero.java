@@ -55,6 +55,8 @@ public class HiloMesero implements Runnable {
                             cliente.notify(); // Desbloquear al cliente
                         }
 
+                        
+
                         // Esperar un poco antes de eliminar el plato
                         // try {
                         //     Thread.sleep(2000); // Simular tiempo para entregar el plato
